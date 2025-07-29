@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/gamenetworkingsockets-x64-windows-1.4.1#1-be5fd7cc-fee0-4041-971d-d3d0d5f7b6a5",
-  "name": "gamenetworkingsockets:x64-windows@1.4.1#1 137b68a91d26ab65ca6a7a4afb39eda847ad9b08578ef8ce2bff335a372c1267",
+  "documentNamespace": "https://spdx.org/spdxdocs/gamenetworkingsockets-x64-windows-1.4.1#1-e2a7caf9-0ba2-4854-b5d7-cd301a1f293f",
+  "name": "gamenetworkingsockets:x64-windows@1.4.1#1 ebd5a72158577982ef3d8b46f613a646c985041c8c1b0fbd569b358f49fb8226",
   "creationInfo": {
     "creators": [
       "Tool: vcpkg-2025-07-21-d4b65a2b83ae6c3526acd1c6f3b51aff2a884533"
     ],
-    "created": "2025-07-29T00:37:05Z"
+    "created": "2025-07-29T02:27:17Z"
   },
   "relationships": [
     {
@@ -74,7 +74,7 @@
     {
       "name": "gamenetworkingsockets:x64-windows",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "137b68a91d26ab65ca6a7a4afb39eda847ad9b08578ef8ce2bff335a372c1267",
+      "versionInfo": "ebd5a72158577982ef3d8b46f613a646c985041c8c1b0fbd569b358f49fb8226",
       "downloadLocation": "NONE",
       "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "NOASSERTION",

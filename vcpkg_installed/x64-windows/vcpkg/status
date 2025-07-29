@@ -3,14 +3,14 @@ Version: 2022-02-06
 Port-Version: 1
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 941507934164594fcb4165f49c152f65c489cea4eff22169786f940dc483f298
+Abi: 24c833e36a7ea90d3943ef9157ecf1e5f2eefbb4e5346e6fc1e737135ba3d366
 Status: install ok installed
 
 Package: vcpkg-cmake
 Version: 2023-05-04
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 3ed5731ab146ec5abf757d35c3c757686937e07df232e2d230ffc88f98ee8bc8
+Abi: 44e79c8a21c314d523ecc8bba7771bb0cd5af54686fb48abe2759f24afbf29bc
 Status: install ok installed
 
 Package: protobuf
@@ -18,7 +18,7 @@ Version: 3.21.12
 Depends: vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 201e4964398f72ba19d0ea96edd8cf1cc92bc90fe40b0c5c7c58a040c57089a5
+Abi: 5c159dbec7fed0b07b0dfde4b2c02f3ca90c522a162ba727242dc5d9ff6c00d8
 Description: Protocol Buffers - Google's data interchange format
 Status: install ok installed
 
@@ -27,7 +27,7 @@ Version: 2023-03-02
 Depends: vcpkg-cmake
 Architecture: x64-windows
 Multi-Arch: same
-Abi: e40d84cf17c3bdcab4a7b9bf726c619e9c938c868ec0fb869ccbc303c06d0a62
+Abi: a5b8aeec5fc68cc7a0e93a8e242b405303b84eadbb3aa363b5d665563872908a
 Status: install ok installed
 
 Package: openssl
@@ -36,7 +36,7 @@ Port-Version: 3
 Depends: vcpkg-cmake, vcpkg-cmake-config, vcpkg-cmake-get-vars
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 71e6825d8f49063a9bf7addd146de886ecd231062d03fda74615f7cb2dbdaab0
+Abi: 929914cb1b1dfb86130abcc05df1827019b7cc74dd68196804181af20e877e0b
 Description: OpenSSL is an open source project that provides a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols. It is also a general-purpose cryptography library.
 Status: install ok installed
 
@@ -46,7 +46,7 @@ Port-Version: 1
 Depends: openssl, protobuf, vcpkg-cmake, vcpkg-cmake-config
 Architecture: x64-windows
 Multi-Arch: same
-Abi: 137b68a91d26ab65ca6a7a4afb39eda847ad9b08578ef8ce2bff335a372c1267
+Abi: ebd5a72158577982ef3d8b46f613a646c985041c8c1b0fbd569b358f49fb8226
 Description: GameNetworkingSockets is a basic transport layer for games.
 Status: install ok installed
 

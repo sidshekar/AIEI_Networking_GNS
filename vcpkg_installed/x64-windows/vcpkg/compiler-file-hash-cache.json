@@ -4,5 +4,11 @@
     "hash" : "f02205af929e59a7d6ae9c03a14fa2700b15e469",
     "size" : 841712,
     "timestamp" : 1706920139
+  },
+  "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.43.34808/bin/Hostx64/x64/cl.exe" : 
+  {
+    "hash" : "0b9f7871fa42be0f9e7d39d31c7c9e3e8e3c690e",
+    "size" : 867912,
+    "timestamp" : 1740772093
   }
 }
