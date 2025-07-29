@@ -1,5 +1,6 @@
 // Example client/server application using SteamNetworkingSockets based on Valve Corporation chat example
 
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
 #include <stdio.h>
@@ -10,7 +11,7 @@
 #include <random>
 #include <chrono>
 #include <thread>
-#include <mutex>xc
+#include <mutex>
 #include <queue>
 #include <map>
 #include <cctype>
@@ -105,6 +106,54 @@ static inline void rtrim(std::string& s) {
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Non-blocking console user input.  Sort of.
+// Why is this so hard?
+//
+/////////////////////////////////////////////////////////////////////////////
+
+std::mutex mutexUserInputQueue;
+std::queue< std::string > queueUserInput;
+
+std::thread* s_pThreadUserInput = nullptr;
+
+void LocalUserInput_Init() {
+	s_pThreadUserInput = new std::thread([]() {
+		while (!g_bQuit) {
+			char szLine[4000];
+			if (!fgets(szLine, sizeof(szLine), stdin)) {
+				// Well, you would hope that you could close the handle
+				// from the other thread to trigger this.  Nope.
+				if (g_bQuit)
+					return;
+				g_bQuit = true;
+				Printf("Failed to read on stdin, quitting\n");
+				break;
+			}
+
+			mutexUserInputQueue.lock();
+			queueUserInput.push(std::string(szLine));
+			mutexUserInputQueue.unlock();
+		}
+		});
+}
+
+// Read the next line of input from stdin, if anything is available.
+bool LocalUserInput_GetNext(std::string& result) {
+	bool got_input = false;
+	mutexUserInputQueue.lock();
+	while (!queueUserInput.empty() && !got_input) {
+		result = queueUserInput.front();
+		queueUserInput.pop();
+		ltrim(result);
+		rtrim(result);
+		got_input = !result.empty(); // ignore blank lines
+	}
+	mutexUserInputQueue.unlock();
+	return got_input;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // NetworkServer
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -158,6 +207,15 @@ public:
 
 				const char* cmd = sCmd.c_str();
 				Printf(cmd);
+
+				// Resend message to all other connected clients
+				for (auto it : m_Clients) {
+					// Don't send to client (make sure to test against the client from our collection)
+					if (it == *itClient) { continue; }
+
+					// Send to client
+					SendStringToClient(it, cmd);
+				}
 			}
 
 			//
@@ -372,10 +430,8 @@ public:
 			// SEND
 			//
 
-			std::string DebugMessage = "Client message";
+			PollLocalUserInput();
 
-			// Send it to the server and let them parse it
-			m_pInterface->SendMessageToConnection(m_hConnection, DebugMessage.c_str(), (uint32)DebugMessage.length(), k_nSteamNetworkingSend_Reliable, nullptr);
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		}
 
@@ -448,6 +504,27 @@ private:
 		default:
 			// Silences -Wswitch
 			break;
+		}
+	}
+
+	void PollLocalUserInput() {
+		std::string cmd;
+		while (!g_bQuit && LocalUserInput_GetNext(cmd)) {
+			// Check for known commands
+			if (strcmp(cmd.c_str(), "/quit") == 0) {
+				g_bQuit = true;
+				Printf("Disconnecting from chat server");
+
+				// Close the connection gracefully.
+				// We use linger mode to ask for any remaining reliable data
+				// to be flushed out.  But remember this is an application
+				// protocol on UDP.  See ShutdownSteamDatagramConnectionSockets
+				m_pInterface->CloseConnection(m_hConnection, 0, "Goodbye", true);
+				break;
+			}
+			else {
+				m_pInterface->SendMessageToConnection(m_hConnection, cmd.c_str(), (uint32)cmd.length(), k_nSteamNetworkingSend_Reliable, nullptr);
+			}
 		}
 	}
 };
@@ -540,6 +617,9 @@ int main(int argc, const char* argv[]) {
 
 	SteamNetworkingUtils()->SetDebugOutputFunction(k_ESteamNetworkingSocketsDebugOutputType_Msg, DebugOutput);
 
+	// Prepare for async user input
+	LocalUserInput_Init();
+
 	//
 	// Application Loop
 	//
@@ -570,8 +650,5 @@ int main(int argc, const char* argv[]) {
 	SteamDatagramClient_Kill();
 #endif
 
-	// Ug, why is there no simple solution for portable, non-blocking console user input?
-	// Just nuke the process
-	//LocalUserInput_Kill();
 	NukeProcess(0);
 }
